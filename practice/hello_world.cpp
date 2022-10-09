@@ -1,27 +1,19 @@
-#include <iostream> /* File: continue-avg.cpp */
+#include <iostream> /* File: c-string.cpp */
 using namespace std;
 int main()
 {
-    int NUM_ASSIGNMENTS = 5; // Uppercase variable doesn’t change
-    int j; // Assignment counter
-    int score, sum_of_scores;
-    char reply = 'y'; // ’y’ for yes, ’n’ for no; initialized to yes
-    cout << "Enter scores for the first student? (y/n) " << endl;
-    while ((cin >> reply) && (reply == 'y' || reply == 'Y'))
-    {
-    sum_of_scores = 0; // Reset the accumulator to zero
-    j = 1; // Reset the assignment counter to 1
-    while (j <= NUM_ASSIGNMENTS)
-    {
-    cout << "Enter student's score for assignment #" << j << " : ";
-    cin >> score; // Remark: one should check input errors here
-    if (score < 0)
-    continue ;
-    sum_of_scores += score;
-    j++;
-    }
-    cout << "The average score = " << sum_of_scores/NUM_ASSIGNMENTS << endl;
-    cout << "Enter scores for another student? (y/n) " ;
-    }
+    char s1[6] = {'h', 'k', 'u', 's', 't', 'z'};
+    // At this point, s1 is still a simple char array
+    for (int j = 0; j < 5; j++)
+        cout << s1[j];
+    cout << endl;
+    s1[5] = '\0'; // Now, s1 is a C string
+    cout << s1 << endl;
+    // Another notation for initializing literal constant strings
+    char s2[20] = {'h', 'k', 'u', 's', 't', '\0'};
+    cout << "s2 = " << s2 << endl;
+    char s3[20] = "hkust";
+    cout << "s3 = " << s3 << endl;
     return 0;
-} // Question: What is the output with the input: 4, 5, -6, 7, 8 ?
+    
+}
