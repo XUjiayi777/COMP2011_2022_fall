@@ -263,7 +263,6 @@ bool niceGuard(int boxes[], int num_prisoners, int num_trials)
     }
 
     int num_loops = 0;
-   
 
     while (true)
     {
@@ -281,7 +280,7 @@ bool niceGuard(int boxes[], int num_prisoners, int num_trials)
     {
         if (num_array[p] > num_trials)
         {
-        
+
             int index_array[MAX_BOXES] = {};
             int loop_len = 0;
             loop_len = num_array[p];
@@ -334,13 +333,18 @@ bool niceGuard(int boxes[], int num_prisoners, int num_trials)
                 {
                     return true;
                 }
+                else
+                {
+                    temp = boxes[index_array[t]];
+                    boxes[index_array[t]] = boxes[index_array[t + 1]];
+                    boxes[index_array[t + 1]] = temp;
+                    continue;
+                }
             }
         }
     }
 
-
-        return false;
-
+    return false;
 }
 
 // DO NOT WRITE ANYTHING AFTER THIS LINE. ANYTHING AFTER THIS LINE WILL BE REPLACED.
