@@ -226,11 +226,121 @@ double successRooms(int boxes[], int num_prisoners, int num_trials) //  suceess 
 //         Return true if the intervention was applied, else return false
 bool niceGuard(int boxes[], int num_prisoners, int num_trials)
 {
+    int fake_boxes[MAX_BOXES] = {};
+    int num_array[MAX_BOXES] = {};
+    int count = -1;
 
-    
-    
+    for (int i = 0; i < num_prisoners; i++)
+    {
+        fake_boxes[i] = boxes[i];
+    } // construct fake boxes
 
-    return false;
+    for (int j = 0; j < num_prisoners; j++)
+    {
+        if (fake_boxes[j] >= 0) // examine if the elements is larger than or equal to 0 or not
+        {
+            int boxnum = j;
+            int num = 0;
+            bool find = false;
+            while (!find)
+            {
+                if (boxes[boxnum] != j)
+                {
+                    fake_boxes[boxnum] = count;
+                    boxnum = boxes[boxnum];
+                }
+                else
+                {
+                    fake_boxes[boxnum] = count;
+                    find = true;
+                }
+                num++;
+            }
+
+            num_array[-count - 1] = num;
+            count--;
+        }
+    }
+
+    int num_loops = 0;
+   
+
+    while (true)
+    {
+        if (num_array[num_loops] != 0)
+        {
+            num_loops++;
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    for (int p = 0; p < num_loops; p++)
+    {
+        if (num_array[p] > num_trials)
+        {
+        
+            int index_array[MAX_BOXES] = {};
+            int loop_len = 0;
+            loop_len = num_array[p];
+            for (int k = 0; k < loop_len;)
+            {
+                for (int f = 0; f < num_prisoners; f++)
+                {
+                    if (fake_boxes[f] == (-p - 1))
+                    {
+                        index_array[k] = f;
+                        k++;
+                    }
+                }
+            } // finish generating index_array
+
+            for (int t = 0; t < loop_len; t++)
+            {
+                int temp = 0;
+                int success = 0;
+
+                temp = boxes[index_array[t]];
+                boxes[index_array[t]] = boxes[index_array[t + 1]];
+                boxes[index_array[t + 1]] = temp; // change boxes
+
+                for (int z = 0; z < num_prisoners; z++)
+                {
+                    int boxnum1 = z;
+                    int num1 = 0;
+                    bool find = false;
+
+                    while (!find)
+                    {
+                        if (boxes[boxnum1] != z)
+                        {
+                            boxnum1 = boxes[boxnum1];
+                        }
+                        else
+                        {
+                            find = true;
+                        }
+                        num1++;
+                    } // calculate the loop length again
+
+                    if (num1 > num_trials)
+                    {
+                        success++;
+                    }
+                }
+                if (success == 0)
+                {
+                    return true;
+                }
+            }
+        }
+    }
+
+
+        return false;
+
 }
 
 // DO NOT WRITE ANYTHING AFTER THIS LINE. ANYTHING AFTER THIS LINE WILL BE REPLACED.
