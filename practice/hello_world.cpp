@@ -1,19 +1,32 @@
-#include <iostream> /* File: c-string.cpp */
+#include <iostream> /* File: c-string-fcn.cpp */
 using namespace std;
-int main()
+const char NULL_CHAR = '\0';
+int str_len(const char s[])
 {
-    char s1[6] = {'h', 'k', 'u', 's', 't', 'z'};
-    // At this point, s1 is still a simple char array
-    for (int j = 0; j < 5; j++)
-        cout << s1[j];
-    cout << endl;
-    s1[5] = '\0'; // Now, s1 is a C string
-    cout << s1 << endl;
-    // Another notation for initializing literal constant strings
-    char s2[20] = {'h', 'k', 'u', 's', 't', '\0'};
-    cout << "s2 = " << s2 << endl;
-    char s3[20] = "hkust";
-    cout << "s3 = " << s3 << endl;
-    return 0;
-    
+    int j;
+    for (j = 0; s[j] != NULL_CHAR; j++)
+        ;
+    return j;
 }
+int str_concatenate(const char s1[], const char s2[], char s[])
+{
+    int j;
+    for (j = 0; s1[j] != NULL_CHAR; j++)
+        s[j] = s1[j]; // Copy s1 to s
+    for (int k = 0; s2[k] != NULL_CHAR; k++, j++)
+        s[j] = s2[k]; // Copy s2 after s1
+    s[j] = NULL_CHAR; // Make s a C String
+}
+    int main()
+    {
+        char a[20] = "Albert";
+        char b[20] = "Einstein";
+        char c[20];
+        int length;
+        cout << "length of string a = " << str_len(a) << endl;
+        cout << "length of string b = " << str_len(b) << endl;
+        length = str_concatenate(a, b, c);
+        cout << "After concatenation: "
+             << c << " of length " << length << endl;
+        return 0;
+    } // Read Appendix B of the textbook for more C string library functions.
