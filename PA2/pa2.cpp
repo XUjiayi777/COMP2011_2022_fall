@@ -656,65 +656,104 @@ int recursive_solver(const int map[NUM_ROWS][NUM_COLS], int initialPlayer, int p
                     copyMap(map, another_map);
                     if (checkIfValid(another_map, i, j, i + 2, j) == DOWN_CAPTURE)
                     {
+                        int keep = another_map[i + 1][j];
                         another_map[i + 2][j] = another_map[i][j];
+                        int keep1 = another_map[i + 2][j];
                         another_map[i][j] = EMPTY;
                         another_map[i + 1][j] = EMPTY;
-                        if (i+2==5)
+                        if (i + 2 == 5)
                         {
                             another_map[i + 2][j] = BLACK_KING;
                         }
+                        recursive_solver(another_map, initialPlayer, findOpponent(player), rounds + 1);
+                        another_map[i][j] = keep1;
+                        another_map[i + 2][j] = EMPTY;
+                        another_map[i + 1][j] = keep;
                     }
                     if (checkIfValid(another_map, i, j, i - 2, j) == UP_CAPTURE)
                     {
+                        int keep = another_map[i - 1][j];
                         another_map[i - 2][j] = another_map[i][j];
+                        int keep1 = another_map[i - 2][j];
                         another_map[i][j] = EMPTY;
                         another_map[i - 1][j] = EMPTY;
-                        if (i-2==0)
+                        if (i - 2 == 0)
                         {
                             another_map[i - 2][j] = RED_KING;
                         }
+                        recursive_solver(another_map, initialPlayer, findOpponent(player), rounds + 1);
+                        another_map[i][j] = keep1;
+                        another_map[i - 2][j] = EMPTY;
+                        another_map[i - 1][j] = keep;
                     }
                     if (checkIfValid(another_map, i, j, i, j + 2) == RIGHT_CAPTURE)
                     {
+                        int keep = another_map[i][j + 1];
                         another_map[i][j + 2] = another_map[i][j];
                         another_map[i][j] = EMPTY;
                         another_map[i][j + 1] = EMPTY;
+                        recursive_solver(another_map, initialPlayer, findOpponent(player), rounds + 1);
+                        another_map[i][j] = another_map[i][j + 2];
+                        another_map[i][j + 2] = EMPTY;
+                        another_map[i][j + 1] = keep;
                     }
                     if (checkIfValid(another_map, i, j, i, j - 2) == LEFT_CAPTURE)
                     {
+                        int keep = another_map[i][j - 1];
                         another_map[i][j - 2] = another_map[i][j];
                         another_map[i][j] = EMPTY;
                         another_map[i][j - 1] = EMPTY;
+                        recursive_solver(another_map, initialPlayer, findOpponent(player), rounds + 1);
+                        another_map[i][j] = another_map[i][j - 2];
+                        another_map[i][j - 2] = EMPTY;
+                        another_map[i][j - 1] = keep;
                     }
                     if (checkIfValid(another_map, i, j, i + 1, j) == VALID)
                     {
                         another_map[i + 1][j] = another_map[i][j];
+                        int keep1 = another_map[i + 1][j];
                         another_map[i][j] = EMPTY;
-                        if (i+1==5)
+                        if (i + 1 == 5)
                         {
                             another_map[i + 1][j] = BLACK_KING;
                         }
+                        recursive_solver(another_map, initialPlayer, findOpponent(player), rounds + 1);
+                        another_map[i][j] = keep1;
+                        another_map[i + 1][j] = EMPTY;
                     }
+                    // printMap(another_map);
+                    // cout << "after" << another_map[i][j] << endl;
+                    // cout << "aa" << i << " " << j << endl;
                     if (checkIfValid(another_map, i, j, i - 1, j) == VALID)
                     {
                         another_map[i - 1][j] = another_map[i][j];
+                        int keep1 = another_map[i - 1][j];
                         another_map[i][j] = EMPTY;
-                        if (i-1==0)
+                        if (i - 1 == 0)
                         {
                             another_map[i - 1][j] = RED_KING;
                         }
+                        recursive_solver(another_map, initialPlayer, findOpponent(player), rounds + 1);
+                        another_map[i][j] = keep1;
+                        another_map[i - 1][j] = EMPTY;
                     }
+
                     if (checkIfValid(another_map, i, j, i, j + 1) == VALID)
                     {
                         another_map[i][j + 1] = another_map[i][j];
                         another_map[i][j] = EMPTY;
+                        recursive_solver(another_map, initialPlayer, findOpponent(player), rounds + 1);
+                        another_map[i][j] = another_map[i][j + 1];
+                        another_map[i][j + 1] = EMPTY;
                     }
                     if (checkIfValid(another_map, i, j, i, j - 1) == VALID)
                     {
                         another_map[i][j - 1] = another_map[i][j];
                         another_map[i][j] = EMPTY;
+                        recursive_solver(another_map, initialPlayer, findOpponent(player), rounds + 1);
+                        another_map[i][j] = another_map[i][j - 1];
+                        another_map[i][j - 1] = EMPTY;
                     }
-                    recursive_solver(another_map, initialPlayer, findOpponent(player), rounds+1);
                 }
             }
         }
