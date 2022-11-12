@@ -635,19 +635,19 @@ int recursive_solver(const int map[NUM_ROWS][NUM_COLS], int initialPlayer, int p
     {
         cout << "----------------------------------" << endl;
         cout << endl;
-        maxScore += WIN_SCORE;
+        return WIN_SCORE;
     }
     else if (end == findOpponent(initialPlayer))
     {
         cout << "----------------------------------" << endl;
         cout << endl;
-        maxScore -= WIN_SCORE;
+        return -WIN_SCORE;
     }
     else if (end == TIE)
     {
         cout << "----------------------------------" << endl;
         cout << endl;
-        maxScore += TIE_SCORE;
+        return TIE_SCORE;
     }
     else if (end == CONTINUE)
     {
@@ -668,7 +668,14 @@ int recursive_solver(const int map[NUM_ROWS][NUM_COLS], int initialPlayer, int p
                         int keep1 = another_map[i + 2][j];
                         another_map[i][j] = EMPTY;
                         another_map[i + 1][j] = EMPTY;
-                        maxScore += CAPTURE_SCORE;
+                        if (player == initialPlayer)
+                        {
+                            maxScore += CAPTURE_SCORE;
+                        }
+                        else if (player != initialPlayer)
+                        {
+                            maxScore -= CAPTURE_SCORE;
+                        }
                         if (i + 2 == 5)
                         {
                             another_map[i + 2][j] = BLACK_KING;
@@ -694,7 +701,14 @@ int recursive_solver(const int map[NUM_ROWS][NUM_COLS], int initialPlayer, int p
                         int keep1 = another_map[i - 2][j];
                         another_map[i][j] = EMPTY;
                         another_map[i - 1][j] = EMPTY;
-                        maxScore += CAPTURE_SCORE;
+                        if (player == initialPlayer)
+                        {
+                            maxScore += CAPTURE_SCORE;
+                        }
+                        else if (player != initialPlayer)
+                        {
+                            maxScore -= CAPTURE_SCORE;
+                        }
                         if (i - 2 == 0)
                         {
                             another_map[i - 2][j] = RED_KING;
@@ -719,7 +733,14 @@ int recursive_solver(const int map[NUM_ROWS][NUM_COLS], int initialPlayer, int p
                         another_map[i][j + 2] = another_map[i][j];
                         another_map[i][j] = EMPTY;
                         another_map[i][j + 1] = EMPTY;
-                        maxScore += CAPTURE_SCORE;
+                        if (player == initialPlayer)
+                        {
+                            maxScore += CAPTURE_SCORE;
+                        }
+                        else if (player != initialPlayer)
+                        {
+                            maxScore -= CAPTURE_SCORE;
+                        }
                         maxScore += recursive_solver(another_map, initialPlayer, findOpponent(player), rounds + 1);
                         if (maxScore > score)
                         {
@@ -740,7 +761,14 @@ int recursive_solver(const int map[NUM_ROWS][NUM_COLS], int initialPlayer, int p
                         another_map[i][j - 2] = another_map[i][j];
                         another_map[i][j] = EMPTY;
                         another_map[i][j - 1] = EMPTY;
-                        maxScore += CAPTURE_SCORE;
+                        if (player == initialPlayer)
+                        {
+                            maxScore += CAPTURE_SCORE;
+                        }
+                        else if (player != initialPlayer)
+                        {
+                            maxScore -= CAPTURE_SCORE;
+                        }
                         maxScore += recursive_solver(another_map, initialPlayer, findOpponent(player), rounds + 1);
                         if (maxScore > score)
                         {
@@ -838,9 +866,6 @@ int recursive_solver(const int map[NUM_ROWS][NUM_COLS], int initialPlayer, int p
             }
         }
     }
-    cout<<"outcome"<<endl;
-    cout<<maxDistinationRow<<" "<<maxDistinationCol<<endl;
-    cout<<maxStartRow<<" "<<maxStartCol<<endl;
     maxScore = score;
     //-------- DO NOT MODIFY CODE BELOW. PUT ANY OF YOUR ANSWERS IN BETWEEN THESE TWO COMMENTS --------
     // cout << "round " << rounds << "Max Score: " << maxScore << endl;
