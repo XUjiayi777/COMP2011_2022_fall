@@ -3,3 +3,5 @@ practice/*
 
 *.exe
 *.o
+*.zip
+*_sol.cpp
