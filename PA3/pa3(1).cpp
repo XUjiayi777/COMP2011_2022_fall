@@ -484,48 +484,43 @@ void ll_print_all(const Course *head)
 
 bool ll_insert_prerequisite(Course *head, const char targetCode[MAX_CODE], const char preCode[MAX_CODE])
 {
+
     // TODO: Implementation of inserting a pre-requisite
     Course *curr = head;
-    CourseItem *prereq=new CourseItem;
-    prereq->course=nullptr;
-    prereq->next=nullptr;
-    cout << "1" << endl;
+    cout<<"1"<<endl;
     while (curr != nullptr)
     {
-        cout << "2" << endl;
+        cout<<"2"<<endl;
         if (strcmp(curr->code, targetCode) == 0)
         {
             Course *pre = head;
-            cout << "3" << endl;
+            cout<<"3"<<endl;
             while (pre != nullptr)
             {
-                cout << "6" << endl;
+                cout<<"6"<<endl;
                 if (strcmp(pre->code, preCode) == 0)
                 {
-                    cout << pre->code << endl;
-                    cout << preCode << endl;
+                    cout<<pre->code<<endl;
+                    cout<<preCode<<endl;
                     bool currisnull = curr == nullptr;
-                    curr->prerequisites=prereq;
-                    prereq->course=pre;
-                    cout << "hahahha" << endl;
+                    cout << boolalpha << "cur is null: " <<currisnull << endl;
+                    bool prereqisnull = curr->prerequisites == nullptr;
+                    cout << boolalpha << "prereq is null: " << prereqisnull << endl;
+                    curr->prerequisites->course = pre;
+                    cout<<"hahahha"<<endl;
                     break;
                 }
                 pre = pre->next;
             }
-            cout << "7" << endl;
+            cout<<"7"<<endl;
+            curr->prerequisites->next=nullptr;
             return true;
         }
-        cout << "4" << endl;
+        cout<<"4"<<endl;
         curr = curr->next;
     }
-    cout << "5" << endl;
+    cout<<"5"<<endl;
     return false;
-    // if (head == nullptr || strcmp(head->code, c) > 0)
-    // {
-    //     new_course->next = head;
-    //     head = new_course;
-    //     return true;
-    // }
 }
 bool ll_insert_exclusion(Course *head, const char targetCode[MAX_CODE], const char excludeCode[MAX_CODE])
 {
@@ -599,6 +594,7 @@ bool ll_insert_course(Course *&head, const char c[MAX_CODE], const char t[MAX_TI
         find->next = new_course;
         return true;
     }
+
     return false;
 }
 bool ll_delete_course(Course *&head, const char c[MAX_CODE])
