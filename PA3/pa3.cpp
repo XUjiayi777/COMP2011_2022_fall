@@ -486,9 +486,9 @@ bool ll_insert_prerequisite(Course *head, const char targetCode[MAX_CODE], const
 {
     // TODO: Implementation of inserting a pre-requisite
     Course *curr = head;
-    CourseItem *prereq=new CourseItem;
-    prereq->course=nullptr;
-    prereq->next=nullptr;
+    CourseItem *prereq = new CourseItem;
+    prereq->course = nullptr;
+    prereq->next = nullptr;
     while (curr != nullptr)
     {
         if (strcmp(curr->code, targetCode) == 0)
@@ -498,29 +498,115 @@ bool ll_insert_prerequisite(Course *head, const char targetCode[MAX_CODE], const
             {
                 if (strcmp(pre->code, preCode) == 0)
                 {
-                    curr->prerequisites=prereq;
-                    prereq->course=pre;
-                    break;
+                    if (curr->prerequisites == nullptr || strcmp(curr->prerequisites->course->code, preCode) > 0)
+                    {
+                        prereq->next = curr->prerequisites;
+                        prereq->course = pre;
+                        curr->prerequisites = prereq;
+                        return true;
+                    }
+                    else
+                    {
+                        int position = 0;
+                        CourseItem *i = curr->prerequisites;
+                        while (i != nullptr)
+                        {
+                            if (strcmp(i->course->code, preCode) == 0)
+                            {
+                                return false;
+                            }
+                            i = i->next;
+                        } // check duplicated course
+
+                        CourseItem *current = curr->prerequisites;
+                        while (current != nullptr)
+                        {
+                            if (strcmp(current->course->code, preCode) > 0)
+                            {
+                                break;
+                            }
+                            position++;
+                            current = current->next;
+                        } // find the position of the inserted course
+
+                        CourseItem *find = curr->prerequisites;
+                        for (int n = 0; n < position - 1 && find->next != nullptr; find = find->next, n++)
+                            ;
+                        prereq->next = find->next;
+                        prereq->course = pre;
+                        find->next = prereq;
+                        return true;
+                    }
                 }
                 pre = pre->next;
             }
-            return true;
         }
         curr = curr->next;
     }
     return false;
-    // if (head == nullptr || strcmp(head->code, c) > 0)
-    // {
-    //     new_course->next = head;
-    //     head = new_course;
-    //     return true;
-    // }
 }
 bool ll_insert_exclusion(Course *head, const char targetCode[MAX_CODE], const char excludeCode[MAX_CODE])
 {
 
     // TODO: Implementation of inserting an exclusion
+    Course *curr = head;
+    CourseItem *exclude = new CourseItem;
+    exclude->course = nullptr;
+    exclude->next = nullptr;
+    while (curr != nullptr)
+    {
+        if (strcmp(curr->code, targetCode) == 0)
+        {
+            Course *pre = head;
+            while (pre != nullptr)
+            {
+                if (strcmp(pre->code, excludeCode) == 0)
+                {
+                    if (curr->exclusions == nullptr || strcmp(curr->exclusions->course->code, excludeCode) > 0)
+                    {
+                        exclude->next = curr->exclusions;
+                        exclude->course = pre;
+                        curr->exclusions = exclude;
+                        return true;
+                    }
+                    else
+                    {
+                        int position = 0;
+                        CourseItem *i = curr->exclusions;
+                        while (i != nullptr)
+                        {
+                            if (strcmp(i->course->code, excludeCode) == 0)
+                            {
+                                return false;
+                            }
+                            i = i->next;
+                        } // check duplicated course
 
+                        CourseItem *current = curr->exclusions;
+                        while (current != nullptr)
+                        {
+                            if (strcmp(current->course->code, excludeCode) > 0)
+                            {
+                                break;
+                            }
+                            position++;
+                            current = current->next;
+                        } // find the position of the inserted course
+
+                        CourseItem *find = curr->exclusions;
+                        for (int n = 0; n < position - 1 && find->next != nullptr; find = find->next, n++)
+                            ;
+                        exclude->next = find->next;
+                        exclude->course = pre;
+                        find->next = exclude;
+                        return true;
+                    }
+                }
+                pre = pre->next;
+            }
+        }
+        curr = curr->next;
+    }
     return false;
 }
 
