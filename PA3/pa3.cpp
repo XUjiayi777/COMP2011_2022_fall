@@ -489,36 +489,25 @@ bool ll_insert_prerequisite(Course *head, const char targetCode[MAX_CODE], const
     CourseItem *prereq=new CourseItem;
     prereq->course=nullptr;
     prereq->next=nullptr;
-    cout << "1" << endl;
     while (curr != nullptr)
     {
-        cout << "2" << endl;
         if (strcmp(curr->code, targetCode) == 0)
         {
             Course *pre = head;
-            cout << "3" << endl;
             while (pre != nullptr)
             {
-                cout << "6" << endl;
                 if (strcmp(pre->code, preCode) == 0)
                 {
-                    cout << pre->code << endl;
-                    cout << preCode << endl;
-                    bool currisnull = curr == nullptr;
                     curr->prerequisites=prereq;
                     prereq->course=pre;
-                    cout << "hahahha" << endl;
                     break;
                 }
                 pre = pre->next;
             }
-            cout << "7" << endl;
             return true;
         }
-        cout << "4" << endl;
         curr = curr->next;
     }
-    cout << "5" << endl;
     return false;
     // if (head == nullptr || strcmp(head->code, c) > 0)
     // {
