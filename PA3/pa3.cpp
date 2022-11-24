@@ -614,7 +614,35 @@ bool ll_delete_prerequisite(Course *head, const char targetCode[MAX_CODE], const
 {
 
     // TODO: Implementation of deleting a pre-requisite
-
+    Course *curr = head;
+    CourseItem *prev = nullptr;
+    CourseItem *current = nullptr;
+    while (curr != nullptr)
+    {
+        if (strcmp(curr->code, targetCode) == 0)
+        {
+            current = curr->prerequisites;
+            while (current != nullptr && strcmp(current->course->code, preCode) != 0)
+            {
+                prev = current;
+                current = current->next;
+            }
+            if (current != nullptr)
+            {
+                if (current == curr->prerequisites)
+                {
+                    curr->prerequisites = curr->prerequisites->next;
+                }
+                else
+                {
+                    prev->next = current->next;
+                }
+                delete current;
+                return true;
+            }
+        }
+        curr = curr->next;
+    }
     return false;
 }
 
@@ -622,7 +650,35 @@ bool ll_delete_exclusion(Course *head, const char targetCode[MAX_CODE], const ch
 {
 
     // TODO: Implementation of deleting an exclusion
-
+    Course *curr = head;
+    CourseItem *prev = nullptr;
+    CourseItem *current = nullptr;
+    while (curr != nullptr)
+    {
+        if (strcmp(curr->code, targetCode) == 0)
+        {
+            current = curr->exclusions;
+            while (current != nullptr && strcmp(current->course->code, excludeCode) != 0)
+            {
+                prev = current;
+                current = current->next;
+            }
+            if (current != nullptr)
+            {
+                if (current == curr->exclusions)
+                {
+                    curr->exclusions = curr->exclusions->next;
+                }
+                else
+                {
+                    prev->next = current->next;
+                }
+                delete current;
+                return true;
+            }
+        }
+        curr = curr->next;
+    }
     return false;
 }
 
