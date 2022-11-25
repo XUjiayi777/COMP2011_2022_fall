@@ -145,6 +145,16 @@ bool ll_modify_course_credit(Course *head, const char c[MAX_CODE], int cred);
  */
 void ll_cleanup_all(Course *&head);
 
+void courseitem_delete(CourseItem *&head)
+{
+    if (head == nullptr){
+        return;
+    }
+    courseitem_delete(head->next);
+    delete head;
+    head=nullptr;
+}
+
 // === Region: The main() function ===
 // The main function is given
 // DO NOT MODIFY anything inside the main() function
@@ -788,10 +798,8 @@ bool ll_delete_course(Course *&head, const char c[MAX_CODE])
 
         else if (strcmp(find->code, c) == 0)
         {
-            delete find->prerequisites;
-            find->prerequisites = nullptr;
-            delete find->exclusions;
-            find->exclusions = nullptr;
+            courseitem_delete(find->prerequisites);
+            courseitem_delete(find->exclusions);
         }
     }
 
@@ -852,8 +860,10 @@ void ll_cleanup_all(Course *&head)
 {
 
     // TODO: Implementation of clean up all
-    for (Course *find = head; find != nullptr; find = find->next)
+    if (head == nullptr)
     {
-        ll_delete_course(head,find->code);
+        return;
     }
+    ll_cleanup_all(head->next);
+    ll_delete_course(head, head->code);
 }
