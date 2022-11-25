@@ -638,6 +638,7 @@ bool ll_delete_prerequisite(Course *head, const char targetCode[MAX_CODE], const
                     prev->next = current->next;
                 }
                 delete current;
+                current = nullptr;
                 return true;
             }
         }
@@ -674,6 +675,7 @@ bool ll_delete_exclusion(Course *head, const char targetCode[MAX_CODE], const ch
                     prev->next = current->next;
                 }
                 delete current;
+                current = nullptr;
                 return true;
             }
         }
@@ -736,7 +738,84 @@ bool ll_delete_course(Course *&head, const char c[MAX_CODE])
 {
 
     // TODO: Implementation of deleting a course
+    for (Course *find = head; find != nullptr; find = find->next)
+    {
+        if (strcmp(find->code, c) != 0)
+        {
+            if (find->prerequisites != nullptr)
+            {
+                CourseItem *prev = nullptr;
+                for (CourseItem *sub = find->prerequisites; sub != nullptr; prev = sub, sub = sub->next)
+                {
+                    if (strcmp(sub->course->code, c) == 0)
+                    {
+                        if (sub == find->prerequisites)
+                        {
+                            find->prerequisites = find->prerequisites->next;
+                        }
+                        else
+                        {
+                            prev->next = sub->next;
+                        }
+                        delete sub;
+                        sub = nullptr;
+                        break;
+                    }
+                }
+            }
+            if (find->exclusions != nullptr)
+            {
+                CourseItem *prev = nullptr;
+                CourseItem *sub = find->exclusions;
+                while (sub != nullptr && strcmp(sub->course->code, c) != 0)
+                {
+                    prev = sub;
+                    sub = sub->next;
+                }
+                if (sub == find->exclusions)
+                {
 
+                    find->exclusions = find->exclusions->next;
+                }
+                else
+                {
+                    prev->next = sub->next;
+                }
+                delete sub;
+                sub = nullptr;
+            }
+        }
+
+        else if (strcmp(find->code, c) == 0)
+        {
+            delete find->prerequisites;
+            find->prerequisites = nullptr;
+            delete find->exclusions;
+            find->exclusions = nullptr;
+        }
+    }
+
+    Course *prev = nullptr;
+    Course *current = head;
+    while (current != nullptr && strcmp(current->code, c) != 0)
+    {
+        prev = current;
+        current = current->next;
+    }
+    if (current != nullptr)
+    {
+        if (current == head)
+        {
+            head = head->next;
+        }
+        else
+        {
+            prev->next = current->next;
+        }
+        delete current;
+        current = nullptr;
+        return true;
+    }
     return false;
 }
 
@@ -744,14 +823,28 @@ bool ll_modify_course_title(Course *head, const char c[MAX_CODE], const char t[M
 {
 
     // TODO: Implementation of modifying a course title
-
+    for (Course *find = head; find != nullptr; find = find->next)
+    {
+        if (strcmp(find->code, c) == 0)
+        {
+            strcpy(find->title, t);
+            return true;
+        }
+    }
     return false;
 }
 bool ll_modify_course_credit(Course *head, const char c[MAX_CODE], int cred)
 {
 
     // TODO: Implementation of modifying a course credit
-
+    for (Course *find = head; find != nullptr; find = find->next)
+    {
+        if (strcmp(find->code, c) == 0)
+        {
+            find->credit = cred;
+            return true;
+        }
+    }
     return false;
 }
 
@@ -759,4 +852,8 @@ void ll_cleanup_all(Course *&head)
 {
 
     // TODO: Implementation of clean up all
+    for (Course *find = head; find != nullptr; find = find->next)
+    {
+        ll_delete_course(head,find->code);
+    }
 }
