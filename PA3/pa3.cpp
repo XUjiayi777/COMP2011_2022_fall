@@ -750,7 +750,6 @@ bool ll_delete_course(Course *&head, const char c[MAX_CODE])
     // TODO: Implementation of deleting a course
     for (Course *find = head; find != nullptr; find = find->next)
     {
-        cout << find->code << endl;
         if (strcmp(find->code, c) != 0)
         {
             if (find->prerequisites != nullptr)
@@ -808,7 +807,6 @@ bool ll_delete_course(Course *&head, const char c[MAX_CODE])
 
         else if (strcmp(find->code, c) == 0)
         {
-            cout << "4" << endl;
             courseitem_delete(find->prerequisites);
             courseitem_delete(find->exclusions);
         }
