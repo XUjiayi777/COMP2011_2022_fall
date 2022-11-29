@@ -147,12 +147,13 @@ void ll_cleanup_all(Course *&head);
 
 void courseitem_delete(CourseItem *&head)
 {
-    if (head == nullptr){
+    if (head == nullptr)
+    {
         return;
     }
     courseitem_delete(head->next);
     delete head;
-    head=nullptr;
+    head = nullptr;
 }
 
 // === Region: The main() function ===
@@ -746,33 +747,38 @@ bool ll_insert_course(Course *&head, const char c[MAX_CODE], const char t[MAX_TI
 }
 bool ll_delete_course(Course *&head, const char c[MAX_CODE])
 {
-
     // TODO: Implementation of deleting a course
     for (Course *find = head; find != nullptr; find = find->next)
     {
+        cout << find->code << endl;
         if (strcmp(find->code, c) != 0)
         {
             if (find->prerequisites != nullptr)
             {
                 CourseItem *prev = nullptr;
-                for (CourseItem *sub = find->prerequisites; sub != nullptr; prev = sub, sub = sub->next)
+                CourseItem *sub = find->prerequisites;
+                while (sub != nullptr && strcmp(sub->course->code, c) != 0)
                 {
-                    if (strcmp(sub->course->code, c) == 0)
+                    prev = sub;
+                    sub = sub->next;
+                }
+
+                if (sub != nullptr)
+                {
+                    if (sub == find->prerequisites)
                     {
-                        if (sub == find->prerequisites)
-                        {
-                            find->prerequisites = find->prerequisites->next;
-                        }
-                        else
-                        {
-                            prev->next = sub->next;
-                        }
-                        delete sub;
-                        sub = nullptr;
-                        break;
+
+                        find->prerequisites = find->prerequisites->next;
                     }
+                    else
+                    {
+                        prev->next = sub->next;
+                    }
+                    delete sub;
+                    sub = nullptr;
                 }
             }
+
             if (find->exclusions != nullptr)
             {
                 CourseItem *prev = nullptr;
@@ -782,22 +788,27 @@ bool ll_delete_course(Course *&head, const char c[MAX_CODE])
                     prev = sub;
                     sub = sub->next;
                 }
-                if (sub == find->exclusions)
-                {
 
-                    find->exclusions = find->exclusions->next;
-                }
-                else
+                if (sub != nullptr)
                 {
-                    prev->next = sub->next;
+                    if (sub == find->exclusions)
+                    {
+
+                        find->exclusions = find->exclusions->next;
+                    }
+                    else
+                    {
+                        prev->next = sub->next;
+                    }
+                    delete sub;
+                    sub = nullptr;
                 }
-                delete sub;
-                sub = nullptr;
             }
         }
 
         else if (strcmp(find->code, c) == 0)
         {
+            cout << "4" << endl;
             courseitem_delete(find->prerequisites);
             courseitem_delete(find->exclusions);
         }
